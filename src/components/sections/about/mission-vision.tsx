@@ -1,4 +1,3 @@
-
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
@@ -227,8 +226,6 @@ function ShapeCard({
             max-w-[365px]
             text-[16px]
             leading-[1.55]
-            sm:text-[12px]
-            lg:text-[14px]
             ${
               isDark
                 ? "text-white/85"
@@ -341,9 +338,8 @@ export function MissionVisionSection() {
           <p
             className="
               mt-3 max-w-[660px]
-              text-sm leading-relaxed
+              text-[14px] leading-relaxed
               text-[#858585]
-              sm:text-base
             "
           >
             Our mission and vision drive everything

@@ -9,6 +9,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 const demoArticleRoots = new Set(["roofing-sheets", "standing-seam", "industrial-roofing", "roofing-tips", "metal-roofing"]);
 const navigation = [
+  { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
   { label: "Products", href: "/products" },
   { label: "Projects", href: "/projects" },
@@ -329,4 +330,3 @@ export function Navbar() {
     </header>
   );
 }
-

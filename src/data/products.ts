@@ -281,7 +281,7 @@ const colourCoatedSheet: Product = {
       },
       {
         src: "/products/profiles/roofing-profile-01.svg",
-        alt: "Colour Coated Sheet — Roofing Profile 01",
+        alt: "Colour Coated Sheet — Roofing Profile 02",
       },
     ],
   },

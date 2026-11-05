@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from "next/link";
@@ -73,7 +72,7 @@ export function ProductTechnicalSpecifications({
       aria-labelledby="product-specifications-heading"
       className="
         relative w-full
-        bg-[#F4F4F4]
+        bg-white
         py-12
         sm:py-16
         lg:py-20
@@ -132,7 +131,7 @@ export function ProductTechnicalSpecifications({
                 className="
                   mt-2 block
                   h-[3px] w-[55px]
-                  bg-[#FF6500]
+                  bg-[#F4F4F4]
                 "
               />
             </div>
@@ -324,6 +323,7 @@ export function ProductTechnicalSpecifications({
                   mt-3
                   overflow-hidden
                   rounded-[10px]
+                  border border-[#DADFE3]
                   bg-white
                 "
               >
@@ -344,14 +344,21 @@ export function ProductTechnicalSpecifications({
                   <tbody>
                     {specifications.map(
                       (specification, index) => (
-                        <tr key={`${specification.label}-${index}`}>
+                        <tr
+                          key={`${specification.label}-${index}`}
+                          className="
+                            [&:not(:last-child)>*]:border-b
+                            [&:not(:last-child)>*]:border-[#DADFE3]
+                          "
+                        >
                           {/* LABEL COLUMN */}
                           <th
                             scope="row"
                             className="
                               relative
                               w-[40%]
-                              bg-[#EDF1F4]
+                              border-r border-[#DADFE3]
+                              bg-[#F5F7F8]
                               px-4 py-4
                               align-top
                               font-medium

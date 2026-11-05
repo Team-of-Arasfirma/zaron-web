@@ -204,7 +204,7 @@ export function AccomplishmentsSection() {
   {/* TITLE */}
   <h3
     className="
-      mt-3 text-[14px] font-semibold
+      mt-3 text-[18px] font-semibold
       text-[#161616]
       transition-colors duration-500
       group-hover:text-white
@@ -217,7 +217,7 @@ export function AccomplishmentsSection() {
   <p
     className="
       mt-3 max-w-[215px]
-      text-[11px] leading-[1.55]
+      text-[14px] leading-[1.55]
       text-[#999999]
       transition-colors duration-500
       group-hover:text-white/90

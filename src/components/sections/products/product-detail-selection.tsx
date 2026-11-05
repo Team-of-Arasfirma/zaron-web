@@ -1,11 +1,38 @@
 "use client";
 
-import { createContext, useContext, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  type ReactNode,
+} from "react";
+
 import type { ProductColor } from "@/data/products";
 
-const SelectionContext = createContext<{ selected?: ProductColor; select: (color: ProductColor) => void }>({ select: () => {} });
-export function ProductDetailSelection({ children }: { children: ReactNode }) {
+type ProductSelectionContextValue = {
+  selected?: ProductColor;
+  select: (color: ProductColor) => void;
+};
+
+const SelectionContext =
+  createContext<ProductSelectionContextValue>({
+    select: () => {},
+  });
+
+export function ProductDetailSelection({
+  children,
+}: {
+  children: ReactNode;
+}) {
   const [selected, select] = useState<ProductColor>();
-  return <SelectionContext.Provider value={{ selected, select }}>{children}</SelectionContext.Provider>;
+
+  return (
+    <SelectionContext.Provider value={{ selected, select }}>
+      {children}
+    </SelectionContext.Provider>
+  );
 }
-export function useProductColor() { return useContext(SelectionContext); }
+
+export function useProductColor() {
+  return useContext(SelectionContext);
+}

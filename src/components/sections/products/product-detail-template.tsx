@@ -42,6 +42,9 @@ export function ProductDetailTemplate({
           categoryLabel={categoryLabel}
         />
 
+        {/* 04. TECHNICAL SPECIFICATIONS */}
+        <ProductTechnicalSpecifications detail={detail} />
+
         {/* 02. ROOFING PROFILES — ALWAYS VISIBLE */}
         <ProductRoofingProfiles
           product={product}
@@ -51,14 +54,13 @@ export function ProductDetailTemplate({
         {/* 03. AVAILABLE COLOURS */}
         <ProductAvailableColours colors={detail.colors} />
 
-        {/* 04. TECHNICAL SPECIFICATIONS */}
-        <ProductTechnicalSpecifications detail={detail} />
+        
 
         {/* 05. PRODUCT OVERVIEW */}
-        <ProductOverview
+      { /* <ProductOverview
           product={product}
           detail={detail}
-        />
+        />*/ }
 
         {/* 06. KEY FEATURES */}
         <ProductKeyFeatures features={detail.features} />

@@ -25,7 +25,7 @@ const highlights = [
   },
   {
     icon: Factory,
-    value: "2,300+",
+    value: "100,000+",
     label: "Tons Annual Capacity",
   },
   {

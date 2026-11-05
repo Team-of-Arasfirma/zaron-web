@@ -1,14 +1,13 @@
-
 "use client";
 
 import Image from "next/image";
 import {
   useEffect,
+  useId,
   useRef,
   useState,
   type ReactNode,
 } from "react";
-
 import {
   motion,
   useInView,
@@ -17,81 +16,63 @@ import {
 
 import { Container } from "@/components/layout/container";
 
-/* -----------------------------------------
-   TIMELINE DATA
-   Figma canvas: 1129 x 536
------------------------------------------ */
-
 const timelineData = [
   {
     year: "2011",
     description:
       "Operations started with roofing sheet manufacturing.",
-    y: 54,
-    badgeX: 483,
-    cardX: 623,
+    y: 60,
   },
   {
     year: "2012",
     description: "Company officially registered.",
-    y: 128,
-    badgeX: 492,
-    cardX: 633,
+    y: 142,
   },
   {
     year: "2016",
     description:
       "Manufacturing facility expanded to 15,000 sq.ft. in Avinashi.",
-    y: 202,
-    badgeX: 509,
-    cardX: 633,
+    y: 224,
   },
   {
     year: "2017",
     description:
       "Second manufacturing facility started. Introduced C & Z Purlin.",
-    y: 282,
-    badgeX: 512,
-    cardX: 636,
+    y: 306,
   },
   {
     year: "2019",
     description:
       "Added Decking Sheet and Tile roofing setup.",
-    y: 342,
-    badgeX: 508,
-    cardX: 638,
+    y: 381,
   },
   {
     year: "2021",
     description:
       "Added Standing Seam roofing solutions.",
-    y: 404,
-    badgeX: 503,
-    cardX: 633,
+    y: 448,
   },
   {
     year: "NOW",
     description:
       "2,300+ tons annual production capacity. Presence in Avinashi and Hyderabad. Pan-India supply network.",
-    y: 474,
-    badgeX: 442,
-    cardX: 635,
+    y: 534,
   },
 ];
 
-/* -----------------------------------------
-   FIGMA CANVAS + CURVE
------------------------------------------ */
-
-const CANVAS_W = 1129;
-const CANVAS_H = 536;
+const CANVAS_W = 1280;
+const CANVAS_H = 610;
 
 const CURVE_CX = 141;
-const CURVE_CY = 268;
-const CURVE_R = 342;
+const CURVE_CY = 300;
+const CURVE_R = 405;
 
-const ORANGE = "#FF6A0F";
+const BADGE_X = 579;
+const BADGE_W = 121;
+const CARD_X = 714;
+const CARD_W = 502;
+
+const ORANGE = "#FF6500";
 const BADGE_ORANGE = "#FF7B25";
 
 function curveX(y: number) {
@@ -99,12 +80,7 @@ function curveX(y: number) {
 
   return (
     CURVE_CX +
-    Math.sqrt(
-      Math.max(
-        0,
-        CURVE_R * CURVE_R - dy * dy
-      )
-    )
+    Math.sqrt(Math.max(0, CURVE_R * CURVE_R - dy * dy))
   );
 }
 
@@ -114,10 +90,6 @@ const CURVE_PATH = `
   0 0 1
   ${curveX(CANVAS_H)} ${CANVAS_H}
 `;
-
-/* -----------------------------------------
-   RESPONSIVE FIT BOX
------------------------------------------ */
 
 function FitBox({
   width,
@@ -131,7 +103,6 @@ function FitBox({
   children: ReactNode;
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
-
   const [scale, setScale] = useState(1);
   const [ready, setReady] = useState(false);
 
@@ -144,13 +115,7 @@ function FitBox({
       const availableWidth = element.clientWidth;
 
       if (availableWidth > 0) {
-        setScale(
-          Math.min(
-            maxScale,
-            availableWidth / width
-          )
-        );
-
+        setScale(Math.min(maxScale, availableWidth / width));
         setReady(true);
       }
     };
@@ -158,16 +123,19 @@ function FitBox({
     update();
 
     const observer = new ResizeObserver(update);
-
     observer.observe(element);
 
     return () => observer.disconnect();
   }, [width, maxScale]);
 
   return (
-    <div ref={ref} className="w-full">
+    <div
+      ref={ref}
+      className="w-full"
+      style={{ aspectRatio: `${width} / ${height}` }}
+    >
       <div
-        className="mx-auto transition-opacity duration-300"
+        className="mx-auto transition-opacity duration-300 motion-reduce:transition-none"
         style={{
           width: width * scale,
           height: height * scale,
@@ -190,12 +158,6 @@ function FitBox({
   );
 }
 
-/* -----------------------------------------
-   LEFT GRAPHIC
-   2ND CODE DESIGN:
-   ROTATING RING + STATIC CENTER LOGO
------------------------------------------ */
-
 function JourneyGraphic({
   inView,
   reduceMotion,
@@ -203,105 +165,119 @@ function JourneyGraphic({
   inView: boolean;
   reduceMotion: boolean;
 }) {
+  const textPathId = useId();
+
   return (
-    <div
-      className="
-        relative flex h-[360px] w-[360px]
-        items-center justify-center
-      "
-    >
-      {/* ROTATING BLACK + ORANGE RING */}
-      <motion.div
+    <div className="relative h-[480px] w-[480px]">
+      {/* BLACK + ORANGE OUTER ARC */}
+      <motion.svg
         aria-hidden="true"
+        viewBox="0 0 480 480"
+        className="absolute inset-0 h-full w-full"
         initial={false}
         animate={
           reduceMotion || !inView
-            ? undefined
+            ? { rotate: 0 }
             : { rotate: [0, 360] }
         }
-        transition={
-          reduceMotion
-            ? { duration: 0 }
-            : {
-                duration: 16,
-                repeat: Infinity,
-                ease: "linear",
-              }
-        }
-        className="absolute inset-0 rounded-full"
-        style={{
-          background:
-            "conic-gradient(from 190deg, #262429 0deg 150deg, #F36A05 150deg 310deg, transparent 310deg 360deg)",
+        transition={{
+          duration: reduceMotion ? 0 : 16,
+          repeat: reduceMotion ? 0 : Infinity,
+          ease: "linear",
         }}
       >
-        {/* WHITE RING CUTOUT */}
-        <div
-          className="
-            absolute inset-[52px]
-            rounded-full bg-white
+        {/* BLACK ARC */}
+        <path
+          d="
+            M 49.5 130
+            A 220 220 0 0 1 403.5 92.8
+            L 358.9 132.9
+            A 160 160 0 0 0 101.4 160
+            Z
           "
+          fill="#302F2F"
         />
-      </motion.div>
 
-      {/* STATIC CENTER CIRCLE WITH FLOAT ANIMATION */}
+        {/* ORANGE ARC */}
+        <path
+          d="
+            M 403.5 92.8
+            A 220 220 0 0 1 297 452.5
+            L 281.4 394.5
+            A 160 160 0 0 0 358.9 132.9
+            Z
+          "
+          fill="#F56300"
+        />
+      </motion.svg>
+
+      {/* WHITE CENTER CIRCLE WITH SHADOW */}
       <motion.div
         initial={false}
         animate={
           reduceMotion || !inView
-            ? undefined
+            ? { y: 0, scale: 1 }
             : {
                 y: [0, -8, 0],
                 scale: [1, 1.015, 1],
               }
         }
-        transition={
-          reduceMotion
-            ? { duration: 0 }
-            : {
-                duration: 3.2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }
-        }
+        transition={{
+          duration: reduceMotion ? 0 : 3.2,
+          repeat: reduceMotion ? 0 : Infinity,
+          ease: "easeInOut",
+        }}
         className="
-          relative z-10 flex
-          h-[250px] w-[250px]
-          flex-col items-center justify-center
+          absolute left-[76px] top-[76px]
+          flex h-[328px] w-[328px]
+          items-center justify-center
           rounded-full bg-white
-          shadow-[0_12px_30px_rgba(0,0,0,0.12)]
+          shadow-[0_14px_32px_rgba(0,0,0,0.18),0_4px_8px_rgba(0,0,0,0.14)]
         "
       >
-        {/* OUR JOURNEY TEXT */}
-        <p
-          className="
-            absolute top-[34px]
-            text-[12px] font-semibold
-            tracking-[0.55em]
-            text-[#F36A05]
-          "
+        {/* CURVED OUR JOURNEY TEXT */}
+        <svg
+          viewBox="0 0 328 328"
+          className="pointer-events-none absolute inset-0 h-full w-full"
+          aria-hidden="true"
         >
-          OUR JOURNEY
-        </p>
+          <defs>
+            <path
+              id={textPathId}
+              d="M 39 127 A 143 143 0 0 1 289 127"
+            />
+          </defs>
 
-        {/* STATIC ZARON LOGO */}
-        <Image
-          src="/logo/zaron-b.png"
-          alt="Zaron Industries"
-          width={220}
-          height={160}
-          className="
-            h-auto w-[150px]
-            object-contain
-          "
-        />
+          <text
+            fill="#F56300"
+            fontSize="18"
+            fontWeight="500"
+            letterSpacing="11"
+          >
+            <textPath
+              href={`#${textPathId}`}
+              startOffset="50%"
+              textAnchor="middle"
+            >
+              OUR JOURNEY
+            </textPath>
+          </text>
+        </svg>
+
+        {/* LOGO */}
+        <div className="relative mt-4 h-[170px] w-[190px]">
+          <Image
+            src="/logo/zaron-b.png"
+            alt="Zaron Industries"
+            fill
+            sizes="190px"
+            className="object-contain"
+          />
+        </div>
       </motion.div>
     </div>
   );
 }
-
-/* -----------------------------------------
-   DESKTOP FIGMA TIMELINE
------------------------------------------ */
 
 function DesktopTimeline({
   inView,
@@ -310,6 +286,7 @@ function DesktopTimeline({
   inView: boolean;
   reduceMotion: boolean;
 }) {
+  const maskId = useId();
   const [activeDot, setActiveDot] = useState<number | null>(null);
 
   return (
@@ -319,21 +296,15 @@ function DesktopTimeline({
         height={CANVAS_H}
         maxScale={1.6}
       >
-        {/* LEFT LOGO GRAPHIC */}
-        <div
-          className="absolute"
-          style={{
-            left: 52,
-            top: 88,
-          }}
-        >
+        {/* LEFT GRAPHIC */}
+        <div className="absolute left-0 top-[60px]">
           <JourneyGraphic
             inView={inView}
             reduceMotion={reduceMotion}
           />
         </div>
 
-        {/* LARGE DASHED CURVE */}
+        {/* CURVED TRACK */}
         <svg
           aria-hidden="true"
           width={CANVAS_W}
@@ -341,27 +312,27 @@ function DesktopTimeline({
           viewBox={`0 0 ${CANVAS_W} ${CANVAS_H}`}
           className="
             pointer-events-none
-            absolute left-0 top-0
-            overflow-visible
+            absolute inset-0 overflow-visible
           "
         >
           <defs>
-            <mask id="journey-curve-mask">
+            <mask
+              id={maskId}
+              maskUnits="userSpaceOnUse"
+              x={0}
+              y={0}
+              width={CANVAS_W}
+              height={CANVAS_H}
+            >
               <motion.path
                 d={CURVE_PATH}
                 fill="none"
                 stroke="white"
                 strokeWidth="6"
                 initial={
-                  reduceMotion
-                    ? false
-                    : { pathLength: 0 }
+                  reduceMotion ? false : { pathLength: 0 }
                 }
-                animate={
-                  inView
-                    ? { pathLength: 1 }
-                    : undefined
-                }
+                animate={inView ? { pathLength: 1 } : undefined}
                 transition={{
                   duration: reduceMotion ? 0 : 2,
                   ease: "easeInOut",
@@ -370,25 +341,18 @@ function DesktopTimeline({
             </mask>
           </defs>
 
-          {/* DASHED CIRCULAR TRACK */}
           <path
             d={CURVE_PATH}
             fill="none"
             stroke="#8E8E8E"
-            strokeWidth="1.2"
-            strokeDasharray="7 7"
-            mask="url(#journey-curve-mask)"
+            strokeWidth="1"
+            strokeDasharray="10 8"
+            mask={`url(#${maskId})`}
           />
 
-          {/* FLOWING DOT ALONG THE CIRCULAR TRACK */}
           {!reduceMotion && inView && (
             <g>
-              {/* MOVING ORANGE GLOW */}
-              <circle
-                r="14"
-                fill={ORANGE}
-                opacity="0.15"
-              >
+              <circle r="14" fill={ORANGE} opacity="0.15">
                 <animateMotion
                   dur="7s"
                   repeatCount="indefinite"
@@ -396,11 +360,7 @@ function DesktopTimeline({
                 />
               </circle>
 
-              {/* MOVING ORANGE POINT */}
-              <circle
-                r="6"
-                fill={ORANGE}
-              >
+              <circle r="6" fill={ORANGE}>
                 <animateMotion
                   dur="7s"
                   repeatCount="indefinite"
@@ -411,180 +371,176 @@ function DesktopTimeline({
           )}
         </svg>
 
-        {/* TIMELINE MILESTONES */}
+        {/* MILESTONES */}
         {timelineData.map((item, index) => {
           const dotX = curveX(item.y);
           const delay = 0.8 + index * 0.14;
 
           return (
             <div key={item.year}>
-              {/* FIXED POINT: entrance, pulse and hover glow */}
+              {/* ORANGE DOT */}
               <motion.div
+                aria-hidden="true"
                 className="absolute z-20 size-8 cursor-default"
-                style={{ left: dotX - 16, top: item.y - 16 }}
+                style={{
+                  left: dotX - 16,
+                  top: item.y - 16,
+                }}
                 onMouseEnter={() => setActiveDot(index)}
                 onMouseLeave={() => setActiveDot(null)}
-                initial={false}
               >
                 <motion.span
-                  className="pointer-events-none absolute inset-2 rounded-full"
+                  className="absolute inset-[7px] rounded-full"
                   style={{ background: ORANGE }}
-                  initial={reduceMotion ? false : { scale: 0, opacity: 0 }}
-                  animate={inView ? { scale: activeDot === index ? 1.45 : 1, opacity: 1 } : undefined}
-                  transition={{ type: "spring", stiffness: 300, damping: 18, delay: reduceMotion ? 0 : delay }}
+                  initial={
+                    reduceMotion
+                      ? false
+                      : { scale: 0, opacity: 0 }
+                  }
+                  animate={
+                    inView
+                      ? {
+                          scale: activeDot === index ? 1.3 : 1,
+                          opacity: 1,
+                        }
+                      : undefined
+                  }
+                  transition={{
+                    duration: reduceMotion ? 0 : 0.4,
+                    delay: reduceMotion ? 0 : delay,
+                  }}
                 />
+
                 {!reduceMotion && inView && (
                   <motion.span
-                    className="pointer-events-none absolute inset-2 rounded-full"
+                    className="absolute inset-[7px] rounded-full"
                     style={{ background: ORANGE }}
                     initial={{ scale: 1, opacity: 0 }}
-                    animate={{ scale: [1, 2.6], opacity: [0.45, 0] }}
-                    transition={{ duration: 2.2, repeat: Infinity, ease: "easeOut", delay: 1.6 + index * 0.3 }}
+                    animate={{
+                      scale: [1, 2.6],
+                      opacity: [0.35, 0],
+                    }}
+                    transition={{
+                      duration: 2.2,
+                      repeat: Infinity,
+                      ease: "easeOut",
+                      delay: 1.6 + index * 0.3,
+                    }}
                   />
                 )}
-                <motion.span
-                  className="pointer-events-none absolute inset-1 rounded-full"
-                  style={{ background: ORANGE }}
-                  initial={false}
-                  animate={{ scale: activeDot === index ? 1.45 : 0.5, opacity: activeDot === index ? 0.18 : 0 }}
-                  transition={{ duration: reduceMotion ? 0 : 0.25 }}
-                />
               </motion.div>
 
-              {/* DOTTED CONNECTOR */}
+              {/* CONNECTOR */}
               <motion.div
                 aria-hidden="true"
                 className="
                   absolute origin-left
-                  border-t border-dotted
-                  border-[#7d7d7d]
+                  border-t border-dotted border-[#7D7D7D]
                 "
                 style={{
-                  left: dotX + 8,
+                  left: dotX + 9,
                   top: item.y,
-                  width:
-                    item.badgeX - dotX - 8,
+                  width: BADGE_X - dotX - 9,
                 }}
                 initial={
-                  reduceMotion
-                    ? false
-                    : { scaleX: 0 }
+                  reduceMotion ? false : { scaleX: 0 }
                 }
-                animate={
-                  inView
-                    ? { scaleX: 1 }
-                    : undefined
-                }
+                animate={inView ? { scaleX: 1 } : undefined}
                 transition={{
                   duration: reduceMotion ? 0 : 0.45,
-                  delay: reduceMotion
-                    ? 0
-                    : delay + 0.1,
+                  delay: reduceMotion ? 0 : delay + 0.1,
                 }}
               />
 
               {/* YEAR BADGE */}
               <motion.div
-                className="
-                  absolute flex h-[28px] w-[107px]
-                  items-center justify-center
-                  rounded-full
-                  text-[11px] font-semibold
-                  tracking-wide text-white
-                  shadow-[0_6px_14px_rgba(255,106,0,0.2)]
-                "
+                className="absolute"
                 style={{
-                  left: item.badgeX,
-                  top: item.y - 14,
-                  background: BADGE_ORANGE,
+                  left: BADGE_X,
+                  top: item.y - 16,
+                  width: BADGE_W,
                 }}
                 initial={
                   reduceMotion
                     ? false
-                    : {
-                        opacity: 0,
-                        x: -24,
-                        scale: 0.9,
-                      }
+                    : { opacity: 0, x: -24 }
                 }
                 animate={
-                  inView
-                    ? {
-                        opacity: 1,
-                        x: 0,
-                        scale: 1,
-                      }
-                    : undefined
-                }
-                whileHover={
-                  reduceMotion
-                    ? undefined
-                    : { scale: 1.06 }
+                  inView ? { opacity: 1, x: 0 } : undefined
                 }
                 transition={{
                   duration: reduceMotion ? 0 : 0.5,
-                  delay: reduceMotion
-                    ? 0
-                    : delay + 0.2,
+                  delay: reduceMotion ? 0 : delay + 0.2,
                 }}
               >
-                {item.year}
+                <motion.div
+                  whileHover={
+                    reduceMotion ? undefined : { scale: 1.06 }
+                  }
+                  transition={{
+                    duration: reduceMotion ? 0 : 0.2,
+                  }}
+                  className="
+                    flex h-[32px] w-full
+                    items-center justify-center
+                    rounded-full
+                    text-[12px] font-semibold
+                    tracking-wide text-white
+                  "
+                  style={{ background: BADGE_ORANGE }}
+                >
+                  {item.year}
+                </motion.div>
               </motion.div>
 
               {/* DESCRIPTION CARD */}
               <div
                 className="absolute -translate-y-1/2"
                 style={{
-                  left: item.cardX,
+                  left: CARD_X,
                   top: item.y,
-                  width: 441,
+                  width: CARD_W,
                 }}
               >
                 <motion.div
-                  className="
-                    flex min-h-[41px]
-                    items-center rounded-[18px]
-                    bg-[#F7F7F7]
-                    py-[11px] pl-[65px] pr-8
-                    shadow-[0_1px_0_rgba(0,0,0,0.04)]
-                    ring-1 ring-[#EEEEEE]
-                  "
                   initial={
                     reduceMotion
                       ? false
-                      : {
-                          opacity: 0,
-                          x: 60,
-                        }
+                      : { opacity: 0, x: 60 }
                   }
                   animate={
-                    inView
-                      ? {
-                          opacity: 1,
-                          x: 0,
-                        }
-                      : undefined
-                  }
-                  whileHover={
-                    reduceMotion
-                      ? undefined
-                      : {
-                          y: -3,
-                          boxShadow:
-                            "0 12px 26px rgba(0,0,0,0.08)",
-                        }
+                    inView ? { opacity: 1, x: 0 } : undefined
                   }
                   transition={{
                     duration: reduceMotion ? 0 : 0.55,
-                    delay: reduceMotion
-                      ? 0
-                      : delay + 0.3,
+                    delay: reduceMotion ? 0 : delay + 0.3,
                     ease: "easeOut",
                   }}
                 >
-                  <p className="text-[14px] leading-[17px] text-[#5A5A5A]">
-                    {item.description}
-                  </p>
+                  <motion.div
+                    whileHover={
+                      reduceMotion
+                        ? undefined
+                        : {
+                            y: -3,
+                            boxShadow:
+                              "0 12px 26px rgba(0,0,0,0.08)",
+                          }
+                    }
+                    transition={{
+                      duration: reduceMotion ? 0 : 0.2,
+                    }}
+                    className="
+                      flex min-h-[47px]
+                      items-center rounded-[17px]
+                      bg-[#F8F7F7]
+                      py-[13px] pl-[73px] pr-8
+                    "
+                  >
+                    <p className="text-[16px] leading-[19px] text-[#6B6B6B]">
+                      {item.description}
+                    </p>
+                  </motion.div>
                 </motion.div>
               </div>
             </div>
@@ -595,10 +551,6 @@ function DesktopTimeline({
   );
 }
 
-/* -----------------------------------------
-   MOBILE + TABLET TIMELINE
------------------------------------------ */
-
 function CompactTimeline({
   inView,
   reduceMotion,
@@ -608,7 +560,7 @@ function CompactTimeline({
 }) {
   return (
     <div className="lg:hidden">
-      {/* RESPONSIVE LOGO GRAPHIC */}
+      {/* LOGO GRAPHIC */}
       <div
         className="
           mx-auto max-w-[300px]
@@ -616,11 +568,7 @@ function CompactTimeline({
           md:max-w-[440px]
         "
       >
-        <FitBox
-          width={360}
-          height={360}
-          maxScale={1.15}
-        >
+        <FitBox width={480} height={480} maxScale={1}>
           <JourneyGraphic
             inView={inView}
             reduceMotion={reduceMotion}
@@ -629,19 +577,12 @@ function CompactTimeline({
       </div>
 
       {/* VERTICAL TIMELINE */}
-      <div
-        className="
-          relative mx-auto mt-10
-          max-w-2xl md:mt-14
-        "
-      >
-        {/* DASHED VERTICAL GUIDE */}
+      <div className="relative mx-auto mt-10 max-w-2xl md:mt-14">
         <div
           aria-hidden="true"
           className="
-            absolute bottom-6 left-[7px]
-            top-6 border-l
-            border-dashed border-[#9B9B9B]
+            absolute bottom-6 left-[7px] top-6
+            border-l border-dashed border-[#9B9B9B]
           "
         />
 
@@ -656,92 +597,85 @@ function CompactTimeline({
               initial={
                 reduceMotion
                   ? false
-                  : {
-                      opacity: 0,
-                      x: 40,
-                    }
+                  : { opacity: 0, x: 40 }
               }
-              animate={
-                inView
-                  ? {
-                      opacity: 1,
-                      x: 0,
-                    }
-                  : undefined
-              }
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
               transition={{
                 duration: reduceMotion ? 0 : 0.5,
-                delay: reduceMotion
-                  ? 0
-                  : 0.3 + index * 0.1,
+                delay: reduceMotion ? 0 : 0.08,
                 ease: "easeOut",
               }}
             >
-              {/* MOBILE POINT: perfect circle + pulse */}
+              {/* POINT */}
               <span
                 aria-hidden="true"
-                className="absolute left-[-32px] top-1/2 block size-4 -translate-y-1/2 rounded-full md:left-[-40px]"
+                className="
+                  absolute left-[-32px] top-1/2
+                  block size-4 -translate-y-1/2
+                  rounded-full md:left-[-40px]
+                "
                 style={{ background: ORANGE }}
               >
                 {!reduceMotion && inView && (
                   <motion.span
                     className="absolute inset-0 rounded-full"
                     style={{ background: ORANGE }}
-                    animate={{ scale: [1, 2.4], opacity: [0.4, 0] }}
-                    transition={{ duration: 2.2, repeat: Infinity, ease: "easeOut", delay: index * 0.25 }}
+                    animate={{
+                      scale: [1, 2.4],
+                      opacity: [0.4, 0],
+                    }}
+                    transition={{
+                      duration: 2.2,
+                      repeat: Infinity,
+                      ease: "easeOut",
+                      delay: index * 0.25,
+                    }}
                   />
                 )}
               </span>
 
-              {/* DOTTED CONNECTOR */}
+              {/* CONNECTOR */}
               <span
                 aria-hidden="true"
                 className="
-                  absolute left-[-16px]
-                  top-1/2 w-4
-                  border-t border-dotted
-                  border-[#7d7d7d]
-                  md:left-[-24px]
+                  absolute left-[-16px] top-1/2 w-4
+                  border-t border-dotted border-[#7D7D7D]
+                  md:left-[-24px] md:w-6
                 "
               />
 
-              {/* YEAR BADGE */}
+              {/* YEAR */}
               <div
                 className="
                   inline-flex min-h-[34px]
                   w-[68px] shrink-0
                   items-center justify-center
                   rounded-full
-                  text-[12px] font-semibold
-                  text-white
-                  shadow-[0_6px_14px_rgba(255,106,0,0.2)]
+                  text-[12px] font-semibold text-white
                   sm:min-h-[38px]
                   sm:w-[96px] sm:text-sm
                 "
-                style={{
-                  background: BADGE_ORANGE,
-                }}
+                style={{ background: BADGE_ORANGE }}
               >
                 {item.year}
               </div>
 
-              {/* DESCRIPTION CARD */}
+              {/* DESCRIPTION */}
               <div
                 className="
                   flex min-w-0 flex-1
                   items-center rounded-[16px]
-                  bg-[#F7F7F7]
+                  bg-[#F8F7F7]
                   px-4 py-3
-                  ring-1 ring-[#EEEEEE]
                   sm:px-5 sm:py-3.5
                 "
               >
                 <p
                   className="
                     text-[12.5px] leading-[1.5]
-                    text-[#5A5A5A]
-                    sm:text-[14px]
-                    md:text-[15px]
+                    text-[#6B6B6B]
+                    sm:text-[14px] md:text-[15px]
                   "
                 >
                   {item.description}
@@ -755,17 +689,16 @@ function CompactTimeline({
   );
 }
 
-/* -----------------------------------------
-   MAIN OUR JOURNEY SECTION
------------------------------------------ */
-
 export function OurJourneySection() {
-  const sectionRef =
-    useRef<HTMLElement | null>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
 
-  const isInView = useInView(sectionRef, {
+  const hasEntered = useInView(sectionRef, {
     once: true,
     margin: "-10% 0px -10% 0px",
+  });
+
+  const isVisible = useInView(sectionRef, {
+    margin: "0px",
   });
 
   const reduceMotion = Boolean(useReducedMotion());
@@ -777,26 +710,22 @@ export function OurJourneySection() {
       aria-labelledby="our-journey-heading"
       className="
         relative w-full overflow-hidden
-        bg-white
-        py-12 md:py-16 lg:py-20
+        bg-white py-12 md:py-16 lg:py-20
       "
     >
       <Container>
-        <h2
-          id="our-journey-heading"
-          className="sr-only"
-        >
+        <h2 id="our-journey-heading" className="sr-only">
           Our Journey
         </h2>
 
         <DesktopTimeline
-          inView={isInView}
-          reduceMotion={reduceMotion}
+          inView={hasEntered}
+          reduceMotion={reduceMotion || !isVisible}
         />
 
         <CompactTimeline
-          inView={isInView}
-          reduceMotion={reduceMotion}
+          inView={hasEntered}
+          reduceMotion={reduceMotion || !isVisible}
         />
       </Container>
     </section>

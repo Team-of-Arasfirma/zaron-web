@@ -47,7 +47,7 @@ export function ProductRoofingProfiles({
       className="
         relative w-full
         overflow-hidden
-        bg-white
+        bg-[#f4f4f4]
         py-14
         sm:py-16
         lg:py-20

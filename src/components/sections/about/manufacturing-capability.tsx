@@ -81,7 +81,7 @@ const statistics = [
     label: "Accessories Machines",
   },
   {
-    value: "2,300+",
+    value: "100,000+",
     label: "Tons Annual Capacity",
   },
 ];

@@ -1,4 +1,3 @@
-
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -36,27 +35,26 @@ const products = [
   "Multiwall Sheet",
 ];
 
-// Replace empty URLs with verified company social links.
 const socialLinks = [
   {
     label: "WhatsApp",
     icon: FaWhatsapp,
-    href: "",
+    href: "https://wa.me/917373748338",
   },
   {
     label: "Instagram",
     icon: FaInstagram,
-    href: "",
+    href: "https://www.instagram.com/rajalakshmi_roofing?igsh=dGJzZWxhbXZkeHU5",
   },
   {
     label: "Facebook",
     icon: FaFacebookF,
-    href: "",
+    href: "https://www.facebook.com/people/Rajalakshmi-Roofings/pfbid0271v2sesEJopdRAq6iHLfyBEX2C3C7iKASRsQb1BQ1EoPKdL7fAawpfNJPS6T2tyFl/?rdid=qCt123OppOGV1yLz&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F18U7y9aXzH%2F",
   },
   {
     label: "YouTube",
     icon: FaYoutube,
-    href: "",
+    href: "https://www.youtube.com/@rajalakshmiroofing3035",
   },
 ];
 

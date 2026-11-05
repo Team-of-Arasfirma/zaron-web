@@ -1,6 +1,6 @@
-
 "use client";
 
+import { useState } from "react";
 import {
   ShieldCheck,
   ReceiptIndianRupee,
@@ -8,11 +8,7 @@ import {
   TruckElectric,
   Cog,
 } from "lucide-react";
-
-import {
-  motion,
-  useReducedMotion,
-} from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 
 import { Container } from "@/components/layout/container";
 
@@ -63,20 +59,54 @@ function ServiceCard({
   service,
   index,
   reduceMotion,
+  tapToToggle = false,
 }: {
   service: (typeof services)[number];
   index: number;
   reduceMotion: boolean;
+  tapToToggle?: boolean;
 }) {
   const Icon = service.icon;
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const triangleHidden = tapToToggle
+    ? isExpanded
+      ? "opacity-0"
+      : "opacity-100"
+    : "group-hover:opacity-0 group-focus-visible:opacity-0";
+
+  const triangleVisible = tapToToggle
+    ? isExpanded
+      ? "opacity-100"
+      : "opacity-0"
+    : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100";
+
+  const normalContentState = tapToToggle
+    ? isExpanded
+      ? "translate-y-3 opacity-0"
+      : "translate-y-0 opacity-100"
+    : `
+        group-hover:translate-y-3
+        group-hover:opacity-0
+        group-focus-visible:translate-y-3
+        group-focus-visible:opacity-0
+      `;
+
+  const descriptionState = tapToToggle
+    ? isExpanded
+      ? "translate-y-0 opacity-100"
+      : "-translate-y-3 opacity-0"
+    : `
+        -translate-y-3 opacity-0
+        group-hover:translate-y-0
+        group-hover:opacity-100
+        group-focus-visible:translate-y-0
+        group-focus-visible:opacity-100
+      `;
 
   return (
     <motion.div
-      initial={
-        reduceMotion
-          ? false
-          : { opacity: 0, y: 28 }
-      }
+      initial={reduceMotion ? false : { opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{
@@ -88,77 +118,103 @@ function ServiceCard({
     >
       <div
         tabIndex={0}
-        className="
+        role={tapToToggle ? "button" : undefined}
+        aria-label={tapToToggle ? service.title : undefined}
+        aria-expanded={tapToToggle ? isExpanded : undefined}
+        onClick={
+          tapToToggle
+            ? () => setIsExpanded((previous) => !previous)
+            : undefined
+        }
+        onKeyDown={
+          tapToToggle
+            ? (event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  setIsExpanded((previous) => !previous);
+                }
+              }
+            : undefined
+        }
+        className={`
           group relative mx-auto
-          h-[166px] w-full max-w-[206px]
-          cursor-default overflow-hidden
+          h-[200px] w-full max-w-[206px]
+          overflow-hidden
           rounded-[11px]
-          border border-[#D0D0D0]
-          bg-[#858585]
+          border
           text-white
           transition-[background-color,border-color,box-shadow]
           duration-500 ease-in-out
 
-          hover:border-[#E2E2E2]
-          hover:bg-white
-          hover:shadow-[0_10px_28px_rgba(0,0,0,0.08)]
-
           focus-visible:border-[#FF6500]
-          focus-visible:bg-white
           focus-visible:outline-2
           focus-visible:outline-offset-2
           focus-visible:outline-[#FF6500]
 
           motion-reduce:transition-none
-        "
+
+          ${
+            tapToToggle
+              ? `
+                cursor-pointer touch-manipulation
+                ${
+                  isExpanded
+                    ? "border-[#E2E2E2] bg-white shadow-[0_10px_28px_rgba(0,0,0,0.08)]"
+                    : "border-[#D0D0D0] bg-[#858585]"
+                }
+              `
+              : `
+                cursor-default
+                border-[#D0D0D0] bg-[#858585]
+                hover:border-[#E2E2E2]
+                hover:bg-white
+                hover:shadow-[0_10px_28px_rgba(0,0,0,0.08)]
+                focus-visible:bg-white
+              `
+          }
+        `}
       >
         {/* BOTTOM LEFT ORANGE TRIANGLE */}
         <div
           aria-hidden="true"
-          className="
+          className={`
             pointer-events-none
             absolute bottom-0 left-0
             h-[52px] w-[52px]
             bg-[#FF6500]
             [clip-path:polygon(0_0,0_100%,100%_100%)]
             transition-opacity duration-300
-            group-hover:opacity-0
-            group-focus-visible:opacity-0
-          "
+            motion-reduce:transition-none
+            ${triangleHidden}
+          `}
         />
 
-        {/* TOP RIGHT DARK TRIANGLE ON HOVER */}
+        {/* TOP RIGHT DARK TRIANGLE */}
         <div
           aria-hidden="true"
-          className="
+          className={`
             pointer-events-none
             absolute right-0 top-0
             h-[62px] w-[62px]
             bg-[#424242]
-            opacity-0
             [clip-path:polygon(0_0,100%_0,100%_100%)]
             transition-opacity duration-300
-            group-hover:opacity-100
-            group-focus-visible:opacity-100
-          "
+            motion-reduce:transition-none
+            ${triangleVisible}
+          `}
         />
 
         {/* NORMAL CONTENT */}
         <div
-          className="
+          aria-hidden={tapToToggle ? isExpanded : undefined}
+          className={`
             absolute inset-0
             flex flex-col items-center justify-center
             gap-2 px-3 text-center
-
             transition-all duration-300 ease-in-out
-            group-hover:translate-y-3
-            group-hover:opacity-0
-
-            group-focus-visible:translate-y-3
-            group-focus-visible:opacity-0
-
             motion-reduce:transition-none
-          "
+            ${normalContentState}
+          `}
         >
           <Icon
             size={64}
@@ -178,24 +234,17 @@ function ServiceCard({
           </h3>
         </div>
 
-        {/* HOVER CONTENT */}
+        {/* DESCRIPTION CONTENT */}
         <div
-          className="
+          aria-hidden={tapToToggle ? !isExpanded : undefined}
+          className={`
             absolute inset-0
             flex flex-col items-start
             px-3 py-3 text-left
-
-            -translate-y-3 opacity-0
             transition-all duration-300 ease-in-out
-
-            group-hover:translate-y-0
-            group-hover:opacity-100
-
-            group-focus-visible:translate-y-0
-            group-focus-visible:opacity-100
-
             motion-reduce:transition-none
-          "
+            ${descriptionState}
+          `}
         >
           <Icon
             size={46}
@@ -206,7 +255,7 @@ function ServiceCard({
 
           <h3
             className="
-              mt-1 text-[17px] leading-tight
+              mt-1 text-[18px] leading-tight
               font-semibold text-[#FF6500]
             "
           >
@@ -216,7 +265,7 @@ function ServiceCard({
           <p
             className="
               mt-1.5 line-clamp-3
-              text-[10px] leading-[1.45]
+              text-[14px] leading-[1.45]
               text-[#777777]
             "
           >
@@ -248,11 +297,7 @@ export function ServicesSection() {
         >
           {/* LEFT CONTENT */}
           <motion.div
-            initial={
-              reduceMotion
-                ? false
-                : { opacity: 0, x: -35 }
-            }
+            initial={reduceMotion ? false : { opacity: 0, x: -35 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.25 }}
             transition={{
@@ -289,9 +334,7 @@ export function ServicesSection() {
                 text-[#282828]
               "
             >
-              <span className="block">
-                BUILT AROUND
-              </span>
+              <span className="block">BUILT AROUND</span>
 
               <span className="mt-3 block text-[#FF6500]">
                 YOUR ROOFING NEEDS.
@@ -302,21 +345,20 @@ export function ServicesSection() {
             <p
               className="
                 mt-6 max-w-[550px]
-                text-[15px] leading-[1.8]
+                text-[16px] leading-[1.8]
                 text-[#555555]
                 sm:text-[17px]
               "
             >
-              From quality-driven manufacturing to reliable
-              delivery and customer-focused support, we
-              provide complete roofing solutions built
-              for long-term performance.
+              From quality-driven manufacturing to reliable delivery and
+              customer-focused support, we provide complete roofing solutions
+              built for long-term performance.
             </p>
           </motion.div>
 
           {/* RIGHT SERVICE CARDS */}
           <div className="w-full">
-            {/* MOBILE / TABLET */}
+            {/* MOBILE / TABLET: TAP TO TOGGLE */}
             <div className="grid grid-cols-2 gap-3 lg:hidden">
               {services.map((service, index) => (
                 <ServiceCard
@@ -324,6 +366,7 @@ export function ServicesSection() {
                   service={service}
                   index={index}
                   reduceMotion={reduceMotion}
+                  tapToToggle
                 />
               ))}
             </div>
