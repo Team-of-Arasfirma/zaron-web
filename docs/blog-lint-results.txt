@@ -1,0 +1,63 @@
+
+> zaron@0.1.0 lint
+> eslint
+
+
+Z:\user\Desktop\zaron\frontend\docs\qa-admin-phase-1.cjs
+  1:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  2:14  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  3:16  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  4:22  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+Z:\user\Desktop\zaron\frontend\docs\qa-assets.cjs
+  1:10  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  1:29  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+Z:\user\Desktop\zaron\frontend\docs\qa-browser.cjs
+  1:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  2:14  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  3:22  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+Z:\user\Desktop\zaron\frontend\docs\qa-interactions.cjs
+  1:10  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  1:38  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  1:80  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+Z:\user\Desktop\zaron\frontend\docs\qa-map.cjs
+  1:10  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  1:41  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+Z:\user\Desktop\zaron\frontend\docs\qa-performance.cjs
+  1:10  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  1:41  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+Z:\user\Desktop\zaron\frontend\docs\qa-product-details.cjs
+  1:12  error    A `require()` style import is forbidden    @typescript-eslint/no-require-imports
+  2:14  error    A `require()` style import is forbidden    @typescript-eslint/no-require-imports
+  3:16  error    A `require()` style import is forbidden    @typescript-eslint/no-require-imports
+  4:22  error    A `require()` style import is forbidden    @typescript-eslint/no-require-imports
+  6:9   warning  'root' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+Z:\user\Desktop\zaron\frontend\docs\qa-reduced.cjs
+  1:18  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+Z:\user\Desktop\zaron\frontend\docs\qa-roofing-profiles-visible.cjs
+   1:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+   2:14  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+   3:16  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+   4:16  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+   5:22  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+   7:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  18:15  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  19:34  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  20:36  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  21:22  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+Z:\user\Desktop\zaron\frontend\docs\qa-roofing-profiles.cjs
+  1:12  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  2:14  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  3:16  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  4:22  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+✖ 36 problems (35 errors, 1 warning)
+
