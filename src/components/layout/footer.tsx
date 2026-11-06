@@ -341,7 +341,9 @@ export function Footer() {
                   </a>
 
                   <p className="mt-1 text-[13px]">
-                    Mon – Sat 9:00 AM – 6:00 PM
+                    Mon – Sat
+                     <br/>
+                     9:00AM – 6:00PM
                   </p>
                 </div>
               </div>

@@ -1,4 +1,3 @@
-
 export type ProductCategory =
   | "roofing-sheets"
   | "crimp-sheets"
@@ -23,6 +22,34 @@ export type ProductColor = {
   hex: string;
   image?: string;
 };
+
+// Shared palette sampled from the supplied colour chart.
+export const PRODUCT_COLOURS: ProductColor[] = [
+  { name: "Off White", hex: "#F2EDE3" },
+  { name: "Grey", hex: "#AAAAAC" },
+  { name: "Sky Blue", hex: "#67BCE9" },
+  { name: "Royal Blue", hex: "#3D62AE" },
+  { name: "Callified Green", hex: "#A4C0A0" },
+  { name: "Brick Red", hex: "#BA4635" },
+  { name: "Bare", hex: "#EDE5D8" },
+  { name: "Aluminium", hex: "#B4BBC2" },
+  { name: "Teracotta Red", hex: "#D15440" },
+  { name: "Chocolate Brown", hex: "#7E4B2E" },
+  { name: "Purple", hex: "#6D2981" },
+  { name: "State Grey", hex: "#606E7B" },
+  { name: "Violet", hex: "#A988BE" },
+  { name: "Elephant Grey", hex: "#9B9B9E" },
+  { name: "Golden Yellow", hex: "#F7B316" },
+  { name: "Orange", hex: "#F4771F" },
+  { name: "Neon Red", hex: "#ED362E" },
+  { name: "Taurus Blue", hex: "#1E5174" },
+  { name: "Sandal", hex: "#CAB293" },
+  { name: "Iron Stone", hex: "#4B4E50" },
+  { name: "Window Grey", hex: "#B1B1B3" },
+  { name: "Mist Green", hex: "#A4C69E" },
+  { name: "Relience Green", hex: "#517233" },
+  { name: "Turquoise Green", hex: "#38BEB9" },
+];
 
 export type ProductFeature = {
   title: string;
@@ -94,7 +121,6 @@ const IMAGE_PATHS = {
 
 // =====================================================
 // PRODUCT 01 — COLOUR COATED SHEET
-// Existing product details preserved.
 // =====================================================
 
 const colourCoatedSheet: Product = {
@@ -271,7 +297,7 @@ const colourCoatedSheet: Product = {
       },
     ],
 
-    colors: [],
+    colors: PRODUCT_COLOURS,
 
     // Existing roofing profile references retained.
     profileImages: [
@@ -613,7 +639,7 @@ function createProducts(
   category: ProductCategory,
   imageFolder: string,
   idPrefix: string,
-  startIndex = 1
+  startIndex = 1,
 ): Product[] {
   return data.map((item, index): Product => ({
     id: `${idPrefix}-${index + startIndex}`,
@@ -627,6 +653,10 @@ function createProducts(
     image: `${imageFolder}/${item.image}`,
 
     description: item.description ?? "",
+
+    detail: {
+      colors: PRODUCT_COLOURS,
+    },
   }));
 }
 
@@ -642,7 +672,7 @@ export const roofingSheetProducts: Product[] = [
     "roofing-sheets",
     IMAGE_PATHS.roofing,
     "roofing",
-    2
+    2,
   ),
 ];
 
@@ -654,7 +684,7 @@ export const crimpSheets: Product[] = createProducts(
   crimpData,
   "crimp-sheets",
   IMAGE_PATHS.crimp,
-  "crimp"
+  "crimp",
 );
 
 // =====================================================
@@ -665,7 +695,7 @@ export const flashingProducts: Product[] = createProducts(
   flashingData,
   "flashing",
   IMAGE_PATHS.flashing,
-  "flashing"
+  "flashing",
 );
 
 // =====================================================
@@ -676,7 +706,7 @@ export const insulationProducts: Product[] = createProducts(
   insulationData,
   "insulation",
   IMAGE_PATHS.insulation,
-  "insulation"
+  "insulation",
 );
 
 // =====================================================
@@ -687,7 +717,7 @@ export const laserCuttingProducts: Product[] = createProducts(
   laserData,
   "laser-cutting",
   IMAGE_PATHS.laser,
-  "laser"
+  "laser",
 );
 
 // =====================================================
@@ -698,7 +728,7 @@ export const purlinProducts: Product[] = createProducts(
   purlinData,
   "purlins",
   IMAGE_PATHS.purlin,
-  "purlin"
+  "purlin",
 );
 
 // =====================================================
@@ -709,7 +739,7 @@ export const sandwichPanelProducts: Product[] = createProducts(
   sandwichPanelData,
   "sandwich-panel",
   IMAGE_PATHS.sandwich,
-  "sandwich"
+  "sandwich",
 );
 
 // =====================================================
