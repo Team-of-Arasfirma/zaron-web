@@ -85,11 +85,9 @@ export function HeroSection() {
                 sm:text-xs
               "
             >
-              Indian
+              INDIA’S LARGEST
               <br />
-              Manufacturer
-              <br />
-              Global Standards
+              ROOFING PROFILER.
             </p>
           </div>
         </div>
