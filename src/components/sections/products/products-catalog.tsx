@@ -7,8 +7,10 @@ import { Container } from "@/components/layout/container";
 import type { ProductCategory } from "@/data/products";
 
 import {
+  PRODUCT_CATEGORIES,
   ProductCategoryTabs,
 } from "./product-category-tabs";
+
 import { ProductSearch } from "./product-search";
 import { ProductsGrid } from "./products-grid";
 
@@ -18,6 +20,15 @@ export function ProductsCatalog() {
 
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Get the selected category's display name.
+  const selectedCategory = PRODUCT_CATEGORIES.find(
+    (category) => category.id === activeCategory
+  );
+
+  const categoryHeading =
+    selectedCategory?.label ?? "All Products";
+
+  // Change category and reset search.
   const handleCategoryChange = (
     category: ProductCategory
   ) => {
@@ -58,7 +69,7 @@ export function ProductsCatalog() {
             onChange={setSearchQuery}
           />
 
-          {/* HEADING */}
+          {/* DYNAMIC CATEGORY HEADING */}
           <h2
             className="
               mt-6
@@ -68,7 +79,7 @@ export function ProductsCatalog() {
               sm:text-[26px]
             "
           >
-            All Products
+            {categoryHeading}
           </h2>
 
           {/* PRODUCT GRID */}

@@ -15,7 +15,10 @@ type ProductCardProps = {
 export function ProductCard({ product }: ProductCardProps) {
   const reduceMotion = Boolean(useReducedMotion());
 
-  const hasDetails = Boolean(product.detail);
+  // ONLY Colour Coated Sheet has an active detail page.
+  const hasDetails =
+    product.slug === "colour-coated-sheet" &&
+    Boolean(product.detail);
 
   const cardContent = (
     <>
@@ -72,14 +75,16 @@ export function ProductCard({ product }: ProductCardProps) {
         {/* PRODUCT IMAGE */}
         {product.image ? (
           <div
-            className="
+            className={`
               relative z-10
               h-[72%] w-[78%]
               max-h-[190px] max-w-[260px]
-              transition-transform duration-500
-              group-hover:scale-[1.04]
-              motion-reduce:transform-none
-            "
+              ${
+                hasDetails
+                  ? "transition-transform duration-500 group-hover:scale-[1.04] motion-reduce:transform-none"
+                  : ""
+              }
+            `}
           >
             <Image
               src={product.image}
@@ -147,18 +152,19 @@ export function ProductCard({ product }: ProductCardProps) {
 
       {/* EXPLORE CTA */}
       <div
-        className="
+        className={`
           mt-5 flex min-h-11
           items-center justify-center
           gap-3
           font-serif
           text-[13px]
           font-semibold
-          text-[#171717]
-          transition-colors
-          duration-300
-          group-hover:text-[#FF6500]
-        "
+          ${
+            hasDetails
+              ? "text-[#171717] transition-colors duration-300 group-hover:text-[#FF6500]"
+              : "text-[#999999]"
+          }
+        `}
       >
         {hasDetails ? (
           <>
@@ -177,8 +183,19 @@ export function ProductCard({ product }: ProductCardProps) {
             />
           </>
         ) : (
-          <span className="text-[#686868]">
-            Details coming soon
+          <span
+            aria-disabled="true"
+            className="
+              inline-flex
+              cursor-not-allowed
+              items-center justify-center
+              rounded-[5px]
+              bg-[#F2F2F2]
+              px-4 py-2
+              text-[#999999]
+            "
+          >
+            Details Coming Soon
           </span>
         )}
       </div>
@@ -229,8 +246,8 @@ export function ProductCard({ product }: ProductCardProps) {
           className="
             flex h-full min-w-0
             flex-1 flex-col
-            rounded-[10px]
             cursor-pointer
+            rounded-[10px]
             focus-visible:outline-2
             focus-visible:outline-offset-[-2px]
             focus-visible:outline-[#FF6500]
