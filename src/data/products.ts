@@ -387,7 +387,7 @@ const roofingData: ProductEntry[] = [
   {
     name: "XLPE Insulated Sheet",
     slug: "xlpe-insulated-sheet",
-    image: "XLP Insulated Sheet.png",
+    image: "XLPE Sheet.png",
   },
   {
     name: "APRO Stone Coated Sheet",
